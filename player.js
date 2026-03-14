@@ -12,6 +12,7 @@ class Player {
         this.audio = new Audio();
         this.episodeId = null;
         this.saveInterval = null;
+        this.currentEpisode = null;
 
         // Элементы UI
         this.playPauseBtn = document.getElementById('playPauseBtn');
@@ -27,6 +28,7 @@ class Player {
         this.playbackSpeeds = [1, 1.5, 2];
         this.currentSpeedIndex = 0;
 
+        this.initMediaSession();
         this.initEvents();
         this.initSpeedButtons();
         this.startSaveInterval();
@@ -68,6 +70,44 @@ class Player {
             const newTime = parseFloat(e.target.value);
             this.audio.currentTime = newTime;
             this.currentTimeSpan.textContent = this.formatTime(newTime);
+        });
+    }
+
+    // Интеграция с Media Session API (блокировка/уведомления на смартфонах)
+    initMediaSession() {
+        if (!('mediaSession' in navigator)) return;
+
+        navigator.mediaSession.setActionHandler('play', () => {
+            this.play();
+        });
+        navigator.mediaSession.setActionHandler('pause', () => {
+            this.pause();
+        });
+        navigator.mediaSession.setActionHandler('seekbackward', () => {
+            this.seek(-10);
+        });
+        navigator.mediaSession.setActionHandler('seekforward', () => {
+            this.seek(10);
+        });
+        navigator.mediaSession.setActionHandler('previoustrack', () => {
+            this.seek(-10);
+        });
+        navigator.mediaSession.setActionHandler('nexttrack', () => {
+            this.seek(10);
+        });
+    }
+
+    // Обновление метаданных для системного плеера
+    updateMediaSessionMetadata() {
+        if (!('mediaSession' in navigator) || !this.currentEpisode) return;
+
+        const { title, description, date } = this.currentEpisode;
+
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: title || 'Эпизод',
+            artist: description || '',
+            album: date || '',
+            artwork: []
         });
     }
 
@@ -124,6 +164,7 @@ class Player {
         }
 
         this.episodeId = episode.id;
+        this.currentEpisode = episode;
         this.nowPlayingTitle.textContent = episode.title;
 
         // Если тот же файл - не перезагружаем
@@ -141,7 +182,8 @@ class Player {
         // Сбрасываем play/pause иконку
         this.pause();
 
-        // Сохраняем последний загруженный выпуск
+        // Обновляем системные метаданные и сохраняем последний загруженный выпуск
+        this.updateMediaSessionMetadata();
         localStorage.setItem('lastEpisodeId', episode.id);
     }
 
