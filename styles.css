@@ -81,8 +81,8 @@ body {
 
 .player__seek::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     background: #0088cc;
     border-radius: 50%;
     cursor: pointer;
@@ -93,54 +93,52 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
 }
 
-.player__btn {
+.player__btn,
+.speed-btn {
     background: transparent;
     border: none;
-    font-size: 18px;
+    font-size: 20px;
     color: #0088cc;
-    padding: 10px 16px;
+    padding: 12px 18px;
     border-radius: 24px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     transition: background 0.2s;
+    justify-content: center;
 }
 
-.player__btn:hover {
+.player__btn:hover,
+.speed-btn:hover {
     background: #f0f0f0;
 }
 
 .player__btn i {
-    font-size: 22px;
+    font-size: 24px;
 }
 
 .player__speed {
     margin-left: auto;
 }
 
-.speed-btn {
-    background: transparent;
-    border: 1px solid #ccc;
-    border-radius: 16px;
-    padding: 6px 10px;
-    font-size: 13px;
-    color: #555;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
 .speed-btn.active {
     background: #0088cc;
-    border-color: #0088cc;
     color: white;
 }
 
+.speed-btn {
+    font-weight: 600;
+    min-width: 72px;
+}
+
 .player__btn--primary {
-    font-size: 20px;
-    padding: 12px 20px;
+    font-size: 26px;
+    padding: 14px 24px;
+    border-radius: 30px;
 }
 
 /* Список выпусков */
@@ -222,18 +220,19 @@ body {
 
 /* Мобильные */
 @media (max-width: 480px) {
-    .player__btn {
-        padding: 6px 8px;
-        font-size: 14px;
+    .player__btn,
+    .speed-btn {
+        padding: 14px 22px;
+        font-size: 22px;
     }
     .player__btn i {
-        font-size: 16px;
+        font-size: 28px;
     }
     .player__speed {
-        gap: 4px;
+        gap: 6px;
     }
     .speed-btn {
-        padding: 3px 6px;
-        font-size: 11px;
+        padding: 6px 10px;
+        font-size: 13px;
     }
 }
